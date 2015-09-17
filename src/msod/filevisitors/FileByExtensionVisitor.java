@@ -10,21 +10,20 @@ import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author aalvarado
  */
-public class FileByTypeVisitor extends AllFilesVisitor {
+public class FileByExtensionVisitor extends AllFilesVisitor {
 
-    private String type;
+    private final Set<String> fileExtensions;
 
-    public FileByTypeVisitor(String type) {
-        if (type == null){
-            type = "";
-        }
-        this.type = type;
+    public FileByExtensionVisitor(String... extensions) {
+        fileExtensions = new HashSet<String>(Arrays.asList(extensions));
     }
 
     @Override
@@ -32,7 +31,7 @@ public class FileByTypeVisitor extends AllFilesVisitor {
         String fileName = file.getFileName().toString();
         int dotPosition = fileName.lastIndexOf(".");
         String extension = file.getFileName().toString().substring(dotPosition + 1).toUpperCase();
-        if (type.equals(extension)) {
+        if (fileExtensions.contains(extension)) {
             fileList.add(file.getFileName());
         }
         return CONTINUE;

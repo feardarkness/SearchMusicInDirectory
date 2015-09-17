@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import msod.filevisitors.AllFilesVisitor;
+import msod.filevisitors.FileByExtensionVisitor;
 
 /**
  *
@@ -18,11 +19,19 @@ import msod.filevisitors.AllFilesVisitor;
 public class MSOD {
 
     public static void main(String[] args) {
-        Path pathToMusic = Paths.get("E:\\Musica");        
-        AllFilesVisitor musicFinder = new AllFilesVisitor();
+        Path pathToMusic;
+        if (args.length == 1) {
+            pathToMusic = Paths.get(args[0]);
+        } else {
+            String currentDirectory = System.getProperty("user.dir");
+            pathToMusic = Paths.get(currentDirectory);
+        }
+
+        FileByExtensionVisitor visitorByType = new FileByExtensionVisitor("MP3", "MP4");
         try {
-            Files.walkFileTree(pathToMusic, musicFinder);
-            System.out.println("Archivos con extension mp3 hallados: " + musicFinder.getFileList());
+            Files.walkFileTree(pathToMusic, visitorByType);
+            System.out.println("Archivos con extension mp3 hallados: " + visitorByType.getFileList());
+            System.out.println("antidad de archivos con extension mp3 hallados: " + visitorByType.getFileList().size());
         } catch (IOException e) {
             e.printStackTrace();
         }

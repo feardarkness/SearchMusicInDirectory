@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,9 +21,10 @@ import java.util.ArrayList;
  */
 public class AllFilesVisitor extends SimpleFileVisitor<Path> {
 
-    protected final ArrayList<Path> fileList = new ArrayList<Path>();
+    protected final List<Path> fileList;
 
     public AllFilesVisitor() {
+        fileList = new ArrayList<Path>();
     }
 
     @Override
@@ -45,7 +48,7 @@ public class AllFilesVisitor extends SimpleFileVisitor<Path> {
         return CONTINUE;
     }
 
-    public ArrayList<Path> getFileList() {
+    public List<Path> getFileList() {
         return fileList;
     }
 }
