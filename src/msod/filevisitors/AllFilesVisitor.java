@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package msod.file.music;
+package msod.filevisitors;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -17,11 +17,11 @@ import java.util.ArrayList;
  *
  * @author aalvarado
  */
-public class DirectoryMusicFinder extends SimpleFileVisitor<Path> {
+public class AllFilesVisitor extends SimpleFileVisitor<Path> {
 
-    public ArrayList<Path> musicList = new ArrayList<Path>();
+    protected final ArrayList<Path> fileList = new ArrayList<Path>();
 
-    public DirectoryMusicFinder() {
+    public AllFilesVisitor() {
     }
 
     @Override
@@ -36,12 +36,7 @@ public class DirectoryMusicFinder extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        String fileName = file.getFileName().toString();
-        int dotPosition = fileName.lastIndexOf(".");
-        String extension = file.getFileName().toString().substring(dotPosition + 1).toUpperCase();
-        if ("MP3".equals(extension)) {
-            musicList.add(file);
-        }
+        fileList.add(file.getFileName());
         return CONTINUE;
     }
 
@@ -50,4 +45,7 @@ public class DirectoryMusicFinder extends SimpleFileVisitor<Path> {
         return CONTINUE;
     }
 
+    public ArrayList<Path> getFileList() {
+        return fileList;
+    }
 }

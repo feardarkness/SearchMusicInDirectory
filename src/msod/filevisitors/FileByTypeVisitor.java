@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package msod.file.music;
+package msod.filevisitors;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
@@ -17,21 +16,15 @@ import java.util.ArrayList;
  *
  * @author aalvarado
  */
-public class DirectoryMusicFinder extends SimpleFileVisitor<Path> {
+public class FileByTypeVisitor extends AllFilesVisitor {
 
-    public ArrayList<Path> musicList = new ArrayList<Path>();
+    private String type;
 
-    public DirectoryMusicFinder() {
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-        return CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-        return CONTINUE;
+    public FileByTypeVisitor(String type) {
+        if (type == null){
+            type = "";
+        }
+        this.type = type;
     }
 
     @Override
@@ -39,15 +32,9 @@ public class DirectoryMusicFinder extends SimpleFileVisitor<Path> {
         String fileName = file.getFileName().toString();
         int dotPosition = fileName.lastIndexOf(".");
         String extension = file.getFileName().toString().substring(dotPosition + 1).toUpperCase();
-        if ("MP3".equals(extension)) {
-            musicList.add(file);
+        if (type.equals(extension)) {
+            fileList.add(file.getFileName());
         }
         return CONTINUE;
     }
-
-    @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-        return CONTINUE;
-    }
-
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import msod.file.music.DirectoryMusicFinder;
+import msod.filevisitors.AllFilesVisitor;
 
 /**
  *
@@ -18,11 +18,11 @@ import msod.file.music.DirectoryMusicFinder;
 public class MSOD {
 
     public static void main(String[] args) {
-        Path pathToMusic = Paths.get("E:\\Musica");
-        DirectoryMusicFinder musicFinder = new DirectoryMusicFinder();
+        Path pathToMusic = Paths.get("E:\\Musica");        
+        AllFilesVisitor musicFinder = new AllFilesVisitor();
         try {
             Files.walkFileTree(pathToMusic, musicFinder);
-            System.out.println("Archivos con extension mp3 hallados: " + musicFinder.musicList.size());
+            System.out.println("Archivos con extension mp3 hallados: " + musicFinder.getFileList());
         } catch (IOException e) {
             e.printStackTrace();
         }
