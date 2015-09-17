@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package msod.filevisitors;
+package msod.filevisitor;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -13,6 +13,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import msod.filemetadata.AudioFileMetadata;
 
 /**
  *
@@ -27,12 +28,13 @@ public class FileByExtensionVisitor extends AllFilesVisitor {
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        String fileName = file.getFileName().toString();
+    public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+        String fileName = filePath.getFileName().toString();
         int dotPosition = fileName.lastIndexOf(".");
-        String extension = file.getFileName().toString().substring(dotPosition + 1).toUpperCase();
+        String extension = fileName.substring(dotPosition + 1).toUpperCase();
+        AudioFileMetadata fileMetadata;
         if (fileExtensions.contains(extension)) {
-            fileList.add(file.getFileName());
+            fileList.put(fileName, filePath);
         }
         return CONTINUE;
     }

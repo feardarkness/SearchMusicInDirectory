@@ -3,30 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package msod;
+package msod.assembler;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-import msod.assembler.AssembleData;
 import msod.filevisitor.FileByExtensionVisitor;
 
 /**
  *
  * @author aalvarado
  */
-public class MSOD {
+public class AssembleData {
 
-    public static void main(String[] args) {
-        AssembleData assembler = AssembleData("E:\\\\Musica", "C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics");
-        Path pathToMusic = Paths.get("E:\\\\Musica");
-        Path pathToLyric = Paths.get("C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics");
+    private final Path pathToMusic;
+    private final Path pathToLyric;
 
+    public AssembleData(String pathToMusic, String pathToLyric) {
+        this.pathToMusic = Paths.get(pathToMusic);
+        this.pathToLyric = Paths.get(pathToLyric);
+    }
+
+    public void assemble() {
         // Always send parameters on uppercase. FileByExtensionVisitor expects parameters in uppercase
-        FileByExtensionVisitor musicVisitorByType = new FileByExtensionVisitor("MP3", "MP4");
-        FileByExtensionVisitor lyricVisitorByType = new FileByExtensionVisitor("TXT", "LRC");
+        FileByExtensionVisitor musicVisitorByType = new FileByExtensionVisitor("MP3", "MP4");   // music extensions
+        FileByExtensionVisitor lyricVisitorByType = new FileByExtensionVisitor("TXT", "LRC");   // lyric extensions
         try {
             Files.walkFileTree(pathToMusic, musicVisitorByType);
             Files.walkFileTree(pathToLyric, lyricVisitorByType);
@@ -37,5 +39,4 @@ public class MSOD {
             e.printStackTrace();
         }
     }
-
 }
