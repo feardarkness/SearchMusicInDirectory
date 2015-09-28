@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Grupo JEE">
-            <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/file/music/DirectoryMusicFinder.java</file>
+            <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/filevisitor/FileByExtensionVisitor.java</file>
+            <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/filemetadata/AudioFileMetadata.java</file>
+            <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/filevisitor/AllFilesVisitor.java</file>
             <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/MSOD.java</file>
+            <file>file:/C:/Users/aalvarado/Documents/NetBeansProjects/MSOD/src/msod/assembler/AssembleData.java</file>
         </group>
     </open-files>
 </project-private>
