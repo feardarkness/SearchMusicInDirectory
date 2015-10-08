@@ -33,7 +33,7 @@ public class FileByExtensionVisitor extends AllFilesVisitor {
         int dotPosition = fileName.lastIndexOf(".");
         String extension = fileName.substring(dotPosition + 1).toUpperCase();        
         if (fileExtensions.contains(extension)) {
-            fileList.put(fileName, filePath);
+            fileList.put(fileName.toUpperCase(), filePath);
         }
         return CONTINUE;
     }

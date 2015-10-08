@@ -30,8 +30,7 @@ public class AssembleData {
 
     public void assemble() {
         File archivo = null;
-        AudioFileMetadata fileMetadata = null;
-        // Always send parameters on uppercase. FileByExtensionVisitor expects parameters in uppercase
+        AudioFileMetadata fileMetadata = null;        
         FileByExtensionVisitor musicVisitorByType = new FileByExtensionVisitor("MP3", "MP4");   // music extensions
         FileByExtensionVisitor lyricVisitorByType = new FileByExtensionVisitor("TXT", "LRC");   // lyric extensions
         try {
@@ -43,17 +42,21 @@ public class AssembleData {
                 archivo = new File(musicFileEntry.getValue().toString());
                 try {
                     fileMetadata = new AudioFileMetadata(archivo);
-                    if (lyricMap.containsKey(fileMetadata.getArtistAndTitle() + ".lrc") || lyricMap.containsKey(fileMetadata.getArtistAndTitle() + ".txt")) {
-                        System.out.println("File " + fileMetadata.getArtistAndTitle());
+
+                    if (lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".lrc").toUpperCase())
+                            || lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".txt").toUpperCase())) {                        
                         cant++;
+                        // create file 4 lucene
+                    }else{
+                        System.out.println("Not found match " + fileMetadata.getArtistAndTitle());
                     }
                 } catch (Exception e) {
                     System.out.println("Error found!!!");
                 }
 
             }
-            System.out.println("Total matches between lyrics and mp3"+cant);
-            System.out.println("Lyrics found: " + lyricVisitorByType.getFileList());
+            System.out.println("total files " + cant);        //851
+            System.out.println("Total matches between lyrics and mp3" + cant);
         } catch (IOException e) {
             e.printStackTrace();
         }
