@@ -14,8 +14,8 @@ import msod.assembler.AssembleData;
 public class MSOD {
 
     public static void main(String[] args) {
-        AssembleData assembler = new AssembleData("E:\\\\Musica", "C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics");
-        assembler.assemble();
+        AssembleData dataAssembler = new AssembleData("E:\\\\Musica", "C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics");
+        dataAssembler.assemble();
     }
 
 }

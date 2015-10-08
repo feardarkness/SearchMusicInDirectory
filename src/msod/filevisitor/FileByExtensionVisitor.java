@@ -31,8 +31,7 @@ public class FileByExtensionVisitor extends AllFilesVisitor {
     public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
         String fileName = filePath.getFileName().toString();
         int dotPosition = fileName.lastIndexOf(".");
-        String extension = fileName.substring(dotPosition + 1).toUpperCase();
-        AudioFileMetadata fileMetadata;
+        String extension = fileName.substring(dotPosition + 1).toUpperCase();        
         if (fileExtensions.contains(extension)) {
             fileList.put(fileName, filePath);
         }
