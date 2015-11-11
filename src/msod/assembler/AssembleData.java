@@ -11,8 +11,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.stream.Stream;
 import msod.filemetadata.AudioFileMetadata;
 import msod.filevisitor.FileByExtensionVisitor;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 /**
  *
@@ -29,7 +39,7 @@ public class AssembleData {
     }
 
     public void assemble() {
-        File archivo = null;
+        File audioFile = null;
         AudioFileMetadata fileMetadata = null;        
         FileByExtensionVisitor musicVisitorByType = new FileByExtensionVisitor("MP3", "MP4");   // music extensions
         FileByExtensionVisitor lyricVisitorByType = new FileByExtensionVisitor("TXT", "LRC");   // lyric extensions
@@ -38,25 +48,50 @@ public class AssembleData {
             Files.walkFileTree(pathToLyric, lyricVisitorByType);
             Map<String, Path> lyricMap = lyricVisitorByType.getFileList();
             int cant = 0;
+            
+            Analyzer analyzer = new StandardAnalyzer();
+            
+            // directorio en RAM
+            //Directory directory = new RAMDirectory();            
+            Directory directory = FSDirectory.open(Paths.get("E:\\Index"));
+            IndexWriterConfig config = new IndexWriterConfig(analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, config);
+            
             for (Map.Entry<String, Path> musicFileEntry : musicVisitorByType.getFileList().entrySet()) {
-                archivo = new File(musicFileEntry.getValue().toString());
+                audioFile = new File(musicFileEntry.getValue().toString());
                 try {
-                    fileMetadata = new AudioFileMetadata(archivo);
+                    fileMetadata = new AudioFileMetadata(audioFile);
 
                     if (lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".lrc").toUpperCase())
-                            || lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".txt").toUpperCase())) {                        
-                        cant++;
-                        // create file 4 lucene
+                            || lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".txt").toUpperCase())){                        
+                        
+                        StringBuilder strBuilder = new StringBuilder();
+                        
+                        try(Stream<String> stream = Files.lines(lyricMap.get((fileMetadata.getArtistAndTitle() + ".lrc").toUpperCase()))){
+                            stream.forEach(strBuilder::append );
+                        }catch(Exception err){                        
+                            try(Stream<String> stream = Files.lines(lyricMap.get((fileMetadata.getArtistAndTitle() + ".txt").toUpperCase()))){
+                                stream.forEach(strBuilder::append );
+                            }
+                        }
+                        Document doc = new Document();
+                        doc.add(new Field("id", fileMetadata.getArtistAndTitle(), TextField.TYPE_STORED));
+                        doc.add(new Field("letra", strBuilder.toString(), TextField.TYPE_STORED));
+                        doc.add(new Field("artista", fileMetadata.getArtist(), TextField.TYPE_STORED));
+                        doc.add(new Field("titulo", fileMetadata.getTitle(), TextField.TYPE_STORED));
+                        indexWriter.addDocument(doc);                        
                     }else{
                         System.out.println("Not found match " + fileMetadata.getArtistAndTitle());
-                    }
+                    }                    
                 } catch (Exception e) {
                     System.out.println("Error found!!!");
+                    e.printStackTrace();
                 }
 
             }
+            indexWriter.close();
             System.out.println("total files " + cant);        //851
-            System.out.println("Total matches between lyrics and mp3" + cant);
+            System.out.println("Total matches between lyrics and mp3 " + cant);
         } catch (IOException e) {
             e.printStackTrace();
         }
