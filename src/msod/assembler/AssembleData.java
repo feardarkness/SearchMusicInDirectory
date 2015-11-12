@@ -18,6 +18,8 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -75,10 +77,10 @@ public class AssembleData {
                             }
                         }
                         Document doc = new Document();
-                        doc.add(new Field("id", fileMetadata.getArtistAndTitle(), TextField.TYPE_STORED));
-                        doc.add(new Field("letra", strBuilder.toString(), TextField.TYPE_STORED));
-                        doc.add(new Field("artista", fileMetadata.getArtist(), TextField.TYPE_STORED));
-                        doc.add(new Field("titulo", fileMetadata.getTitle(), TextField.TYPE_STORED));
+                        doc.add(new StringField("id", fileMetadata.getArtistAndTitle(), Store.YES));        // stringField not analyzed (no tokens)
+                        doc.add(new TextField("letra", strBuilder.toString(), Store.YES));                  // textField analized (tokenized)
+                        doc.add(new TextField("artista", fileMetadata.getArtist(), Store.YES));
+                        doc.add(new TextField("titulo", fileMetadata.getTitle(), Store.YES));
                         indexWriter.addDocument(doc);                        
                     }else{
                         System.out.println("Not found match " + fileMetadata.getArtistAndTitle());
