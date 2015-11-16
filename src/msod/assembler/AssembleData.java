@@ -46,7 +46,7 @@ public class AssembleData {
         this.pathToLyric = Paths.get(pathToLyric);
     }
 
-    public void assemble() throws IOException {        
+    public void assemble() throws IOException {
         FileByExtensionVisitor musicVisitorByType = new FileByExtensionVisitor("MP3", "MP4");   // music extensions
         FileByExtensionVisitor lyricVisitorByType = new FileByExtensionVisitor("TXT", "LRC");   // lyric extensions
         Files.walkFileTree(pathToMusic, musicVisitorByType);
@@ -57,17 +57,17 @@ public class AssembleData {
     public void compareAndIndex(Map<String, Path> lyricMap, Map<String, Path> musicMap) {
         File audioFile = null;
         AudioFileMetadata fileMetadata = null;
+        StringBuilder strBuilder = new StringBuilder();
         int cant = 0;
         try (MusicIndexer musicIndexer = new MusicIndexer(Paths.get(Config.getInstance().getPathToIndex()))) {
             for (Map.Entry<String, Path> musicFileEntry : musicMap.entrySet()) {
                 audioFile = new File(musicFileEntry.getValue().toString());
-                try {                    
+                try {
                     fileMetadata = new AudioFileMetadata(audioFile);
                     if (lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".lrc").toUpperCase())
                             || lyricMap.containsKey((fileMetadata.getArtistAndTitle() + ".txt").toUpperCase())) {
 
-                        StringBuilder strBuilder = new StringBuilder();
-
+                        strBuilder.setLength(0);
                         try (Stream<String> stream = Files.lines(lyricMap.get((fileMetadata.getArtistAndTitle() + ".lrc").toUpperCase()))) {
                             stream.forEach(strBuilder::append);
                         } catch (Exception err) {

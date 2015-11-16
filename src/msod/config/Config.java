@@ -17,10 +17,13 @@ public class Config {
     private final String pathToLyrics = "C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics";
 
     private Config() {
-        configuration = new Config();
+        
     }
 
     public static Config getInstance() {
+        if (configuration == null){
+            configuration = new Config();
+        }
         return configuration;
     }
 
