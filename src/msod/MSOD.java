@@ -5,7 +5,9 @@
  */
 package msod;
 
+import java.io.IOException;
 import msod.assembler.AssembleData;
+import msod.config.Config;
 
 /**
  *
@@ -13,8 +15,8 @@ import msod.assembler.AssembleData;
  */
 public class MSOD {
 
-    public static void main(String[] args) {
-        AssembleData dataAssembler = new AssembleData("E:\\Musica", "C:\\Users\\aalvarado\\AppData\\Roaming\\MiniLyrics\\Lyrics");
+    public static void main(String[] args) throws IOException {
+        AssembleData dataAssembler = new AssembleData(Config.getInstance().getPathToMusic(), Config.getInstance().getPathToLyrics());
         dataAssembler.assemble();
     }
 
